@@ -1,3 +1,4 @@
+
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { Send, ArrowLeft } from "lucide-react";
@@ -60,8 +61,11 @@ const ChatWindow = ({
           // Get AI response
           const aiResponse = getAIResponse(newMessage.trim());
           
-          // Add AI response
-          onSendMessage(aiResponse, true);
+          // Add AI response (don't call the same function that's in the parent component)
+          // This was causing duplicate messages
+          if (aiResponse) {
+            onSendMessage(aiResponse, true);
+          }
         }, typingDelay);
       }
     }
@@ -148,7 +152,7 @@ const ChatWindow = ({
             <div key={groupIndex} className="space-y-1">
               {group.map((message, messageIndex) => (
                 <MessageBubble
-                  key={message.id}
+                  key={`${message.id}-${messageIndex}`}
                   message={message}
                   isLastInGroup={messageIndex === group.length - 1}
                   isAI={selectedContact.isAI}

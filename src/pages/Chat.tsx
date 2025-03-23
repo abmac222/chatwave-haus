@@ -76,9 +76,13 @@ const Chat = () => {
          (message.senderId === currentUser.id && message.receiverId === selectedContact.id))
       ) {
         setMessages(prevMessages => {
-          const updatedMessages = [...prevMessages, message];
-          saveConversationHistory(currentUser.id, selectedContact.id, updatedMessages);
-          return updatedMessages;
+          // Check if message already exists to prevent duplicates
+          if (!prevMessages.some(m => m.id === message.id)) {
+            const updatedMessages = [...prevMessages, message];
+            saveConversationHistory(currentUser.id, selectedContact.id, updatedMessages);
+            return updatedMessages;
+          }
+          return prevMessages;
         });
         
         // Mark message as read if it's from the selected contact
@@ -176,16 +180,20 @@ const Chat = () => {
     
     // Update local state
     setMessages(prevMessages => {
-      const updatedMessages = [...prevMessages, message];
-      saveConversationHistory(currentUser!.id, selectedContact.id, updatedMessages);
-      return updatedMessages;
+      // Check if message already exists to prevent duplicates
+      if (!prevMessages.some(m => m.id === message.id)) {
+        const updatedMessages = [...prevMessages, message];
+        saveConversationHistory(currentUser!.id, selectedContact.id, updatedMessages);
+        return updatedMessages;
+      }
+      return prevMessages;
     });
   };
   
   const handleBackToContacts = () => {
     setShowChat(false);
   };
-  
+
   // Mobile layout (conditional rendering)
   if (isMobile) {
     return (
