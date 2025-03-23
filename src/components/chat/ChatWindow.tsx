@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
 import { Send, ArrowLeft } from "lucide-react";
@@ -13,7 +12,7 @@ import { useIsMobile } from "@/hooks/use-mobile";
 interface ChatWindowProps {
   selectedContact: Contact;
   messages: Message[];
-  onSendMessage: (message: string) => void;
+  onSendMessage: (message: string, isAIResponse?: boolean) => void;
   onBackToContacts?: () => void;
 }
 
